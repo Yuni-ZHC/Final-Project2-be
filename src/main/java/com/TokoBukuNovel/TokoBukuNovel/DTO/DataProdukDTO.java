@@ -3,30 +3,13 @@ package com.TokoBukuNovel.TokoBukuNovel.DTO;
 import java.math.BigDecimal;
 
 public class DataProdukDTO {
-    private Long id;
-    private Long idAdmin;
     private String judulNovel;
     private String deskripsiNovel;
-    private String ratingNovel;
-    private BigDecimal hargaNovel;  // Ubah ke BigDecimal
+    private Double ratingNovel;
+    private BigDecimal hargaNovel; // Gunakan BigDecimal untuk harga
     private String penulisNovel;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getIdAdmin() {
-        return idAdmin;
-    }
-
-    public void setIdAdmin(Long idAdmin) {
-        this.idAdmin = idAdmin;
-    }
-
+    // Getters and setters
     public String getJudulNovel() {
         return judulNovel;
     }
@@ -43,11 +26,11 @@ public class DataProdukDTO {
         this.deskripsiNovel = deskripsiNovel;
     }
 
-    public String getRatingNovel() {
+    public Double getRatingNovel() {
         return ratingNovel;
     }
 
-    public void setRatingNovel(String ratingNovel) {
+    public void setRatingNovel(Double ratingNovel) {
         this.ratingNovel = ratingNovel;
     }
 
@@ -55,7 +38,7 @@ public class DataProdukDTO {
         return hargaNovel;
     }
 
-    public void setHargaNovel(BigDecimal hargaNovel) {  // Gantilah ke BigDecimal
+    public void setHargaNovel(BigDecimal hargaNovel) {
         this.hargaNovel = hargaNovel;
     }
 
@@ -67,4 +50,9 @@ public class DataProdukDTO {
         this.penulisNovel = penulisNovel;
     }
 
+    public void setIdAdmin(Long id) {
+    }
+
+    public void setId(Long id) {
+    }
 }

@@ -64,7 +64,7 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
         result.setIdAdmin(admin.getId());
         result.setJudulNovel(savedProduk.getJudulNovel());
         result.setDeskripsiNovel(savedProduk.getDeskripsiNovel());
-        result.setRatingNovel(String.valueOf(savedProduk.getRatingNovel())); // Convert Double ke String
+        result.setRatingNovel(Double.valueOf(String.valueOf(savedProduk.getRatingNovel()))); // Convert Double ke String
         result.setHargaNovel(savedProduk.getHargaNovel()); // Menggunakan BigDecimal langsung
         result.setPenulisNovel(savedProduk.getPenulisNovel());
 
@@ -94,7 +94,7 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
         result.setIdAdmin(admin.getId());
         result.setJudulNovel(updatedDataProduk.getJudulNovel());
         result.setDeskripsiNovel(updatedDataProduk.getDeskripsiNovel());
-        result.setRatingNovel(String.valueOf(updatedDataProduk.getRatingNovel())); // Convert Double ke String
+        result.setRatingNovel(Double.valueOf(String.valueOf(updatedDataProduk.getRatingNovel()))); // Convert Double ke String
         result.setHargaNovel(updatedDataProduk.getHargaNovel()); // Menggunakan BigDecimal langsung
         result.setPenulisNovel(updatedDataProduk.getPenulisNovel());
 
