@@ -16,6 +16,8 @@ import java.util.Optional;
 @Service
 public class DataProdukImpl implements ProdukService {  // Implement ProdukService
 
+    private static final String BASE_URL = "https://s3.lynk2.co/api/s3"; // URL API
+
     private final DataProdukRepository dataprodukRepository;
     private final AdminRepository adminRepository;
 
@@ -68,35 +70,40 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
         result.setHargaNovel(savedProduk.getHargaNovel()); // Menggunakan BigDecimal langsung
         result.setPenulisNovel(savedProduk.getPenulisNovel());
 
+        // Tambahkan URL API
+        result.setApiUrl(BASE_URL + "/produk/" + savedProduk.getId());
 
         return result;
     }
 
     @Override
-    public DataProdukDTO editDataProdukDTO(Long id, Long idAdmin, DataProdukDTO dataprodukDTO) throws IOException {
+    public DataProdukDTO editDataProdukDTO(Long id, Long idAdmin, DataProdukDTO dataProdukDTO) throws IOException {
         Produk existingData = dataprodukRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("DataProduk tidak ditemukan"));
+                .orElseThrow(() -> new NotFoundException("Produk tidak ditemukan"));
 
         Admin admin = adminRepository.findById(idAdmin)
                 .orElseThrow(() -> new NotFoundException("Admin dengan ID " + idAdmin + " tidak ditemukan"));
 
-        // Update product details
-        existingData.setJudulNovel(dataprodukDTO.getJudulNovel());
-        existingData.setDeskripsiNovel(dataprodukDTO.getDeskripsiNovel().trim());
-        existingData.setRatingNovel(Double.valueOf(dataprodukDTO.getRatingNovel())); // Convert String to Double
-        existingData.setPenulisNovel(dataprodukDTO.getPenulisNovel());
+        // Update produk
+        existingData.setJudulNovel(dataProdukDTO.getJudulNovel());
+        existingData.setDeskripsiNovel(dataProdukDTO.getDeskripsiNovel());
+        existingData.setRatingNovel(dataProdukDTO.getRatingNovel());
+        existingData.setHargaNovel(dataProdukDTO.getHargaNovel());
+        existingData.setPenulisNovel(dataProdukDTO.getPenulisNovel());
+        existingData.setGambarNovel(dataProdukDTO.getGambarNovel()); // Update URL gambar
         existingData.setAdmin(admin);
 
-        Produk updatedDataProduk = dataprodukRepository.save(existingData);
+        Produk updatedProduk = dataprodukRepository.save(existingData);
 
+        // Map ke DTO
         DataProdukDTO result = new DataProdukDTO();
-        result.setId(updatedDataProduk.getId());
-        result.setIdAdmin(admin.getId());
-        result.setJudulNovel(updatedDataProduk.getJudulNovel());
-        result.setDeskripsiNovel(updatedDataProduk.getDeskripsiNovel());
-        result.setRatingNovel(Double.valueOf(String.valueOf(updatedDataProduk.getRatingNovel()))); // Convert Double ke String
-        result.setHargaNovel(updatedDataProduk.getHargaNovel()); // Menggunakan BigDecimal langsung
-        result.setPenulisNovel(updatedDataProduk.getPenulisNovel());
+        result.setId(updatedProduk.getId());
+        result.setJudulNovel(updatedProduk.getJudulNovel());
+        result.setDeskripsiNovel(updatedProduk.getDeskripsiNovel());
+        result.setRatingNovel(updatedProduk.getRatingNovel());
+        result.setHargaNovel(updatedProduk.getHargaNovel());
+        result.setPenulisNovel(updatedProduk.getPenulisNovel());
+        result.setGambarNovel(updatedProduk.getGambarNovel()); // Set URL gambar ke DTO
 
         return result;
     }

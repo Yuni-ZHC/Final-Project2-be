@@ -26,6 +26,19 @@ public class Produk {
     @Column(name = "penulis_novel")
     private String penulisNovel;
 
+    // Menambahkan fotoUrl
+    @Column(name = "foto_url")
+    private String fotoUrl;
+
+    // Getter dan Setter untuk fotoUrl
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "id_admin", nullable = false)
@@ -43,6 +56,7 @@ public class Produk {
         this.ratingNovel = ratingNovel;
         this.hargaNovel = hargaNovel;
         this.penulisNovel = penulisNovel;
+        this.gambarNovel = gambarNovel;
 
     }
 
@@ -108,6 +122,19 @@ public class Produk {
     public void setPenulisNovel(String penulisNovel) {
         this.penulisNovel = penulisNovel;
     }
+
+    @Column(name = "gambar_novel", nullable = true)
+    private String gambarNovel;
+
+    public String getGambarNovel() {
+        return gambarNovel;
+    }
+
+    public void setGambarNovel(String gambarNovel) {
+        this.gambarNovel = gambarNovel;
+    }
+
+
 
 
     // Getter and Setter for admin

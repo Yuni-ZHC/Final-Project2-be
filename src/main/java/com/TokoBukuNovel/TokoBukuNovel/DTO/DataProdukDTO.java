@@ -8,6 +8,8 @@ public class DataProdukDTO {
     private Double ratingNovel;
     private BigDecimal hargaNovel; // Gunakan BigDecimal untuk harga
     private String penulisNovel;
+    private String gambarNovel;
+    private String fotoNovel;
 
     // Getters and setters
     public String getJudulNovel() {
@@ -50,9 +52,32 @@ public class DataProdukDTO {
         this.penulisNovel = penulisNovel;
     }
 
+    public String getGambarNovel() {
+        return gambarNovel;
+    }
+
+    public void setGambarNovel(String gambarNovel) {
+        this.gambarNovel = gambarNovel;
+    }
+
+    public String getFotoNovel() {
+        return fotoNovel;
+    }
+
+    public void setFotoNovel(String fotoNovel) {
+        this.fotoNovel = fotoNovel;
+    }
+
     public void setIdAdmin(Long id) {
     }
 
     public void setId(Long id) {
+        
+    }
+
+    public void setApiUrl(String s) {
+    }
+
+    public void setFotoUrl(String fileUrl) {
     }
 }
