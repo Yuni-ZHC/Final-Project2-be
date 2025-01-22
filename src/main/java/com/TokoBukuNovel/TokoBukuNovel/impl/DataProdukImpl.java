@@ -8,6 +8,7 @@ import com.TokoBukuNovel.TokoBukuNovel.repository.DataProdukRepository;
 import com.TokoBukuNovel.TokoBukuNovel.repository.AdminRepository;
 import com.TokoBukuNovel.TokoBukuNovel.service.ProdukService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -70,8 +71,8 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
         result.setHargaNovel(savedProduk.getHargaNovel()); // Menggunakan BigDecimal langsung
         result.setPenulisNovel(savedProduk.getPenulisNovel());
 
-        // Tambahkan URL API
-        result.setApiUrl(BASE_URL + "/produk/" + savedProduk.getId());
+//        // Tambahkan URL API
+//        result.setApiUrl(BASE_URL + "/produk/" + savedProduk.getId());
 
         return result;
     }
@@ -112,5 +113,15 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
     @Override
     public void deleteProduk(Long id) {
         dataprodukRepository.deleteById(id);
+    }
+
+    @Override
+    public String uploadFoto(MultipartFile file) {
+        return "";
+    }
+
+    @Override
+    public DataProdukDTO getDataProdukById(Long id) {
+        return null;
     }
 }

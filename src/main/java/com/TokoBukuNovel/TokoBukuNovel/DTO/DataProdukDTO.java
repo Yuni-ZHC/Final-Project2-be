@@ -1,17 +1,37 @@
 package com.TokoBukuNovel.TokoBukuNovel.DTO;
 
 import java.math.BigDecimal;
+import io.swagger.annotations.ApiModelProperty;
+
 
 public class DataProdukDTO {
-    private String judulNovel;
-    private String deskripsiNovel;
-    private Double ratingNovel;
-    private BigDecimal hargaNovel; // Gunakan BigDecimal untuk harga
-    private String penulisNovel;
-    private String gambarNovel;
-    private String fotoNovel;
+    private Long id; // Untuk menyimpan ID produk
+    private Long idAdmin; // Untuk menyimpan ID admin
+    private String judulNovel; // Judul produk/novel
+    private String deskripsiNovel; // Deskripsi produk/novel
+    private Double ratingNovel; // Rating produk/novel
+    private BigDecimal hargaNovel; // Harga produk/novel
+    private String penulisNovel; // Nama penulis novel
+    private String gambarNovel; // URL gambar produk
+    private String fotoUrl; // URL foto yang diunggah
 
-    // Getters and setters
+    // Getter dan Setter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getIdAdmin() {
+        return idAdmin;
+    }
+
+    public void setIdAdmin(Long idAdmin) {
+        this.idAdmin = idAdmin;
+    }
+
     public String getJudulNovel() {
         return judulNovel;
     }
@@ -60,24 +80,28 @@ public class DataProdukDTO {
         this.gambarNovel = gambarNovel;
     }
 
-    public String getFotoNovel() {
-        return fotoNovel;
+    public String getFotoUrl() {
+        return fotoUrl;
     }
 
-    public void setFotoNovel(String fotoNovel) {
-        this.fotoNovel = fotoNovel;
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
     }
 
-    public void setIdAdmin(Long id) {
+    // Override toString() untuk membantu debugging
+    @Override
+    public String toString() {
+        return "DataProdukDTO{" +
+                "id=" + id +
+                ", idAdmin=" + idAdmin +
+                ", judul='" + judulNovel + '\'' +
+                ", deskripsi='" + deskripsiNovel + '\'' +
+                ", rating=" + ratingNovel +
+                ", harga=" + hargaNovel +
+                ", penulis='" + penulisNovel + '\'' +
+                ", gambar='" + gambarNovel + '\'' +
+                ", fotoUrl='" + fotoUrl + '\'' +
+                '}';
     }
 
-    public void setId(Long id) {
-        
-    }
-
-    public void setApiUrl(String s) {
-    }
-
-    public void setFotoUrl(String fileUrl) {
-    }
 }

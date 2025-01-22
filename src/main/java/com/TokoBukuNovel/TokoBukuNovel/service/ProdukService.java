@@ -2,6 +2,7 @@ package com.TokoBukuNovel.TokoBukuNovel.service;
 
 import com.TokoBukuNovel.TokoBukuNovel.DTO.DataProdukDTO;
 import com.TokoBukuNovel.TokoBukuNovel.model.Produk;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,4 +22,9 @@ public interface ProdukService {
 
 
     void deleteProduk(Long id) throws IOException;
+
+
+    String uploadFoto(MultipartFile file);
+
+    DataProdukDTO getDataProdukById(Long id);
 }
