@@ -26,19 +26,11 @@ public class Produk {
     @Column(name = "penulis_novel")
     private String penulisNovel;
 
-    // Menambahkan fotoUrl
-    @Column(name = "foto_url")
+    @Column(name = "foto_url") // Menambahkan fotoUrl
     private String fotoUrl;
 
-    // Getter dan Setter untuk fotoUrl
-    public String getFotoUrl() {
-        return fotoUrl;
-    }
-
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
-    }
-
+    @Column(name = "gambar_novel", nullable = true) // Gambar novel
+    private String gambarNovel;
 
     @ManyToOne
     @JoinColumn(name = "id_admin", nullable = false)
@@ -49,15 +41,15 @@ public class Produk {
     }
 
     // Parameterized constructor without 'id' (since it's auto-generated)
-    public Produk(Admin admin, String judulNovel, String deskripsiNovel, Double ratingNovel, BigDecimal hargaNovel, String penulisNovel, String urlImage) {
+    public Produk(Admin admin, String judulNovel, String deskripsiNovel, Double ratingNovel, BigDecimal hargaNovel, String penulisNovel, String fotoUrl, String gambarNovel) {
         this.admin = admin;
         this.judulNovel = judulNovel;
         this.deskripsiNovel = deskripsiNovel;
         this.ratingNovel = ratingNovel;
         this.hargaNovel = hargaNovel;
         this.penulisNovel = penulisNovel;
+        this.fotoUrl = fotoUrl;
         this.gambarNovel = gambarNovel;
-
     }
 
     // Getter and Setter for id
@@ -123,9 +115,16 @@ public class Produk {
         this.penulisNovel = penulisNovel;
     }
 
-    @Column(name = "gambar_novel", nullable = true)
-    private String gambarNovel;
+    // Getter and Setter for fotoUrl
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
 
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
+
+    // Getter and Setter for gambarNovel
     public String getGambarNovel() {
         return gambarNovel;
     }
@@ -133,9 +132,6 @@ public class Produk {
     public void setGambarNovel(String gambarNovel) {
         this.gambarNovel = gambarNovel;
     }
-
-
-
 
     // Getter and Setter for admin
     public Admin getAdmin() {

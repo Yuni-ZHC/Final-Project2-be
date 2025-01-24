@@ -7,7 +7,13 @@ import com.TokoBukuNovel.TokoBukuNovel.model.Produk;
 import com.TokoBukuNovel.TokoBukuNovel.repository.DataProdukRepository;
 import com.TokoBukuNovel.TokoBukuNovel.repository.AdminRepository;
 import com.TokoBukuNovel.TokoBukuNovel.service.ProdukService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,12 +21,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DataProdukImpl implements ProdukService {  // Implement ProdukService
+public class DataProdukImpl implements ProdukService {
 
-    private static final String BASE_URL = "https://s3.lynk2.co/api/s3"; // URL API
+    private static final String BASE_URL = "https://s3.lynk2.co/api/s3";
 
     private final DataProdukRepository dataprodukRepository;
     private final AdminRepository adminRepository;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public DataProdukImpl(DataProdukRepository dataprodukRepository, AdminRepository adminRepository) {
         this.dataprodukRepository = dataprodukRepository;
@@ -38,6 +45,11 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
     }
 
     @Override
+    public Optional<Produk> getProdukById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Produk> getDataById(Long id) {
         return dataprodukRepository.findById(id);
     }
@@ -51,15 +63,10 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
         data.setAdmin(admin);
         data.setJudulNovel(dataprodukDTO.getJudulNovel());
         data.setDeskripsiNovel(dataprodukDTO.getDeskripsiNovel().trim());
-        data.setRatingNovel(Double.valueOf(dataprodukDTO.getRatingNovel())); // Convert String ke Double
+        data.setRatingNovel(dataprodukDTO.getRatingNovel());
         data.setPenulisNovel(dataprodukDTO.getPenulisNovel());
-
-        // Konversi String ke BigDecimal untuk hargaNovel
-        try {
-            data.setHargaNovel(dataprodukDTO.getHargaNovel());  // Menggunakan BigDecimal langsung
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Harga novel tidak valid: " + dataprodukDTO.getHargaNovel());
-        }
+        data.setHargaNovel(dataprodukDTO.getHargaNovel());
+        data.setGambarNovel(dataprodukDTO.getGambarNovel());
 
         Produk savedProduk = dataprodukRepository.save(data);
 
@@ -67,12 +74,10 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
         result.setIdAdmin(admin.getId());
         result.setJudulNovel(savedProduk.getJudulNovel());
         result.setDeskripsiNovel(savedProduk.getDeskripsiNovel());
-        result.setRatingNovel(Double.valueOf(String.valueOf(savedProduk.getRatingNovel()))); // Convert Double ke String
-        result.setHargaNovel(savedProduk.getHargaNovel()); // Menggunakan BigDecimal langsung
+        result.setRatingNovel(savedProduk.getRatingNovel());
+        result.setHargaNovel(savedProduk.getHargaNovel());
         result.setPenulisNovel(savedProduk.getPenulisNovel());
-
-//        // Tambahkan URL API
-//        result.setApiUrl(BASE_URL + "/produk/" + savedProduk.getId());
+        result.setGambarNovel(savedProduk.getGambarNovel());
 
         return result;
     }
@@ -96,7 +101,6 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
 
         Produk updatedProduk = dataprodukRepository.save(existingData);
 
-        // Map ke DTO
         DataProdukDTO result = new DataProdukDTO();
         result.setId(updatedProduk.getId());
         result.setJudulNovel(updatedProduk.getJudulNovel());
@@ -109,15 +113,36 @@ public class DataProdukImpl implements ProdukService {  // Implement ProdukServi
         return result;
     }
 
-
     @Override
     public void deleteProduk(Long id) {
         dataprodukRepository.deleteById(id);
     }
 
-    @Override
-    public String uploadFoto(MultipartFile file) {
-        return "";
+
+    public String uploadFoto(MultipartFile file) throws IOException {
+        String uploadUrl = BASE_URL + "/uploadFoto";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", file.getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(uploadUrl, HttpMethod.POST, requestEntity, String.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return extractFileUrlFromResponse(response.getBody());
+        } else {
+            throw new IOException("Failed to upload file: " + response.getStatusCode());
+        }
+    }
+
+    private String extractFileUrlFromResponse(String responseBody) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonResponse = mapper.readTree(responseBody);
+        JsonNode dataNode = jsonResponse.path("data");
+        return dataNode.path("url_file").asText();
     }
 
     @Override

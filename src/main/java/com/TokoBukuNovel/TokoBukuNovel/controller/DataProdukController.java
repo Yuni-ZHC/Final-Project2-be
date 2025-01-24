@@ -3,6 +3,7 @@ package com.TokoBukuNovel.TokoBukuNovel.controller;
 import com.TokoBukuNovel.TokoBukuNovel.DTO.DataProdukDTO;
 import com.TokoBukuNovel.TokoBukuNovel.model.Produk;
 import com.TokoBukuNovel.TokoBukuNovel.service.ProdukService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -51,21 +52,22 @@ public class DataProdukController {
         return data.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping(value = "/data/tambah/{idAdmin}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping("/data/tambah/{idAdmin}")
     public ResponseEntity<DataProdukDTO> tambahProduk(
             @PathVariable Long idAdmin,
-            @RequestPart("data") DataProdukDTO dataprodukDTO,
-            @RequestPart("file") MultipartFile file) throws IOException {
-
-        // Upload foto dan dapatkan URL file
-        String fileUrl = uploadFotoToServer(file);
-
-        // Set URL foto ke DTO
-        dataprodukDTO.setFotoUrl(fileUrl);
-
-        // Simpan data produk menggunakan service
-        DataProdukDTO savedProduk = produkService.tambahDataProdukDTO(idAdmin, dataprodukDTO);
-
+            @RequestParam("produk") String produkJson,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        // Convert the produk JSON string to ProdukDTO
+        ObjectMapper objectMapper = new ObjectMapper();
+        DataProdukDTO produkDTO = objectMapper.readValue(produkJson, DataProdukDTO.class);
+        // Upload the photo and get the photo URL from ProdukImpl
+        String fotoUrl = produkService.uploadFoto(file);  // Call the uploadFoto from the service implementation
+        // Set the photo URL in the DTO
+        produkDTO.setFotoUrl(fotoUrl);
+        // Save the produk with the photo URL
+        DataProdukDTO savedProduk = produkService.tambahDataProdukDTO(idAdmin, produkDTO);
+        // Log to ensure the fotoUrl is set correctly
+        System.out.println("Saved Produk: " + savedProduk);
         return ResponseEntity.ok(savedProduk);
     }
 

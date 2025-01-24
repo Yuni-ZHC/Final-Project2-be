@@ -14,6 +14,9 @@ public interface ProdukService {
 
     List<Produk> getAllByAdmin(Long idAdmin);
 
+    Optional<Produk> getProdukById(Long id);
+
+
     Optional<Produk> getDataById(Long id);
 
     DataProdukDTO tambahDataProdukDTO(Long idAdmin, DataProdukDTO dataprodukDTO);
@@ -24,7 +27,7 @@ public interface ProdukService {
     void deleteProduk(Long id) throws IOException;
 
 
-    String uploadFoto(MultipartFile file);
+    String uploadFoto(MultipartFile file) throws IOException;
 
     DataProdukDTO getDataProdukById(Long id);
 }
