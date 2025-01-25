@@ -3,8 +3,8 @@ package com.TokoBukuNovel.TokoBukuNovel.DTO;
 import java.math.BigDecimal;
 import io.swagger.annotations.ApiModelProperty;
 
-
 public class DataProdukDTO {
+
     private Long id; // Untuk menyimpan ID produk
     private Long idAdmin; // Untuk menyimpan ID admin
     private String judulNovel; // Judul produk/novel
@@ -12,8 +12,7 @@ public class DataProdukDTO {
     private Double ratingNovel; // Rating produk/novel
     private BigDecimal hargaNovel; // Harga produk/novel
     private String penulisNovel; // Nama penulis novel
-    private String gambarNovel; // URL gambar produk
-    private String fotoUrl; // URL foto yang diunggah
+    private String gambarNovel; // URL gambar produk (ganti dari fotoUrl ke gambarNovel)
 
     // Getter dan Setter
     public Long getId() {
@@ -80,14 +79,6 @@ public class DataProdukDTO {
         this.gambarNovel = gambarNovel;
     }
 
-    public String getFotoUrl() {
-        return fotoUrl;
-    }
-
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
-    }
-
     // Override toString() untuk membantu debugging
     @Override
     public String toString() {
@@ -100,8 +91,6 @@ public class DataProdukDTO {
                 ", harga=" + hargaNovel +
                 ", penulis='" + penulisNovel + '\'' +
                 ", gambar='" + gambarNovel + '\'' +
-                ", fotoUrl='" + fotoUrl + '\'' +
                 '}';
     }
-
 }

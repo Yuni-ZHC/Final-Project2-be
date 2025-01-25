@@ -26,11 +26,8 @@ public class Produk {
     @Column(name = "penulis_novel")
     private String penulisNovel;
 
-    @Column(name = "foto_url") // Menambahkan fotoUrl
-    private String fotoUrl;
-
-    @Column(name = "gambar_novel", nullable = true) // Gambar novel
-    private String gambarNovel;
+    @Column(name = "gambar_novel") // Ganti 'fotoUrl' menjadi 'gambar_novel'
+    private String gambarNovel; // Ini sekarang menjadi kolom untuk URL gambar
 
     @ManyToOne
     @JoinColumn(name = "id_admin", nullable = false)
@@ -41,14 +38,13 @@ public class Produk {
     }
 
     // Parameterized constructor without 'id' (since it's auto-generated)
-    public Produk(Admin admin, String judulNovel, String deskripsiNovel, Double ratingNovel, BigDecimal hargaNovel, String penulisNovel, String fotoUrl, String gambarNovel) {
+    public Produk(Admin admin, String judulNovel, String deskripsiNovel, Double ratingNovel, BigDecimal hargaNovel, String penulisNovel, String gambarNovel) {
         this.admin = admin;
         this.judulNovel = judulNovel;
         this.deskripsiNovel = deskripsiNovel;
         this.ratingNovel = ratingNovel;
         this.hargaNovel = hargaNovel;
         this.penulisNovel = penulisNovel;
-        this.fotoUrl = fotoUrl;
         this.gambarNovel = gambarNovel;
     }
 
@@ -113,15 +109,6 @@ public class Produk {
 
     public void setPenulisNovel(String penulisNovel) {
         this.penulisNovel = penulisNovel;
-    }
-
-    // Getter and Setter for fotoUrl
-    public String getFotoUrl() {
-        return fotoUrl;
-    }
-
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
     }
 
     // Getter and Setter for gambarNovel

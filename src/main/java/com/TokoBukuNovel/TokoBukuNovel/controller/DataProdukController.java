@@ -57,17 +57,48 @@ public class DataProdukController {
             @PathVariable Long idAdmin,
             @RequestParam("produk") String produkJson,
             @RequestParam("file") MultipartFile file) throws IOException {
-        // Convert the produk JSON string to ProdukDTO
+
+        // Log the incoming file and product data
+        System.out.println("Received file: " + file.getOriginalFilename());
+        System.out.println("Received produkJson: " + produkJson);
+
+        // Convert the produk JSON string to DataProdukDTO
         ObjectMapper objectMapper = new ObjectMapper();
-        DataProdukDTO produkDTO = objectMapper.readValue(produkJson, DataProdukDTO.class);
-        // Upload the photo and get the photo URL from ProdukImpl
-        String fotoUrl = produkService.uploadFoto(file);  // Call the uploadFoto from the service implementation
-        // Set the photo URL in the DTO
-        produkDTO.setFotoUrl(fotoUrl);
-        // Save the produk with the photo URL
-        DataProdukDTO savedProduk = produkService.tambahDataProdukDTO(idAdmin, produkDTO);
-        // Log to ensure the fotoUrl is set correctly
+        DataProdukDTO dataprodukDTO = objectMapper.readValue(produkJson, DataProdukDTO.class);
+
+        // Validate file
+        if (file.isEmpty()) {
+            System.out.println("Error: File is empty");
+            return ResponseEntity.badRequest().body(null); // Handle empty file scenario
+        }
+
+        // Upload the photo and get the photo URL
+        String gambarUrl = produkService.uploadFoto(file); // Ganti 'fotoUrl' menjadi 'gambarUrl'
+
+        if (gambarUrl == null || gambarUrl.isEmpty()) {
+            System.out.println("Error: Failed to upload the file");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Return error if upload failed
+        }
+
+        // Set the image URL in the DTO
+        dataprodukDTO.setGambarNovel(gambarUrl); // Ganti 'setFotoUrl' dengan 'setGambarNovel'
+
+        // Log the final product DTO
+        System.out.println("DataProdukDTO with Gambar URL: " + dataprodukDTO);
+
+        // Save the product data with the image URL
+        DataProdukDTO savedProduk = produkService.tambahDataProdukDTO(idAdmin, dataprodukDTO);
+
+        // If product saving fails, log an error and return
+        if (savedProduk == null) {
+            System.out.println("Error: Failed to save the product to database");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        // Log the saved product details
         System.out.println("Saved Produk: " + savedProduk);
+
+        // Return the saved product DTO as a response
         return ResponseEntity.ok(savedProduk);
     }
 
@@ -111,6 +142,7 @@ public class DataProdukController {
         // Parsing URL file dari respons API
         return extractFileUrlFromResponse(response.getBody());
     }
+
 
     private String extractFileUrlFromResponse(String responseBody) {
         // Contoh parsing jika respons berupa JSON
